@@ -33,13 +33,24 @@ jobs:
       - name: Build static site with Vite
         run: bun run build
 
-      - name: Create 404.html fallback for client-side routing
-        run: cp dist/index.html dist/404.html
+      - name: Verify build directory & create 404.html fallback
+        run: |
+          # If output is in 'build' instead of 'dist', fallback to 'build'
+          if [ -d "dist" ]; then
+            cp dist/index.html dist/404.html
+            echo "BUILD_PATH=dist" >> $GITHUB_ENV
+          elif [ -d "build" ]; then
+            cp build/index.html build/404.html
+            echo "BUILD_PATH=build" >> $GITHUB_ENV
+          else
+            echo "Neither 'dist' nor 'build' folder was found after build!"
+            exit 1
+          fi
 
-      - name: Upload dist artifact
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "./dist"
+          path: "./${{ env.BUILD_PATH }}"
 
   deploy:
     environment:
