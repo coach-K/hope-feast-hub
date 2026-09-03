@@ -1,4 +1,4 @@
-name: Deploy Lovable Vite App to GitHub Pages
+name: Deploy Front-End App to GitHub Pages
 
 on:
   push:
@@ -6,13 +6,11 @@ on:
       - main
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -33,18 +31,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build project with Vite
-        # Pass environment variables needed during build time (e.g., Supabase / API keys)
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      - name: Build static site with Vite
         run: npm run build
 
-      - name: Create 404.html fallback for React Router (SPA)
-        # Fixes 404 errors on browser refresh or direct sub-route visits
+      - name: Create 404.html fallback for client-side routing
+        # Keeps direct page refreshes working if using React Router
         run: cp dist/index.html dist/404.html
 
-      - name: Upload artifact
+      - name: Upload dist artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: "./dist"
