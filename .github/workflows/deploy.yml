@@ -30,31 +30,16 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build static site with Vite
+      - name: Build static site
         run: bun run build
 
-      - name: List directory structure to find build output
-        run: |
-          echo "=== Root directory contents ==="
-          ls -la
-
-      - name: Verify build directory & create 404.html fallback
-        run: |
-          if [ -d "dist" ]; then
-            cp dist/index.html dist/404.html
-            echo "BUILD_PATH=dist" >> $GITHUB_ENV
-          elif [ -d "build" ]; then
-            cp build/index.html build/404.html
-            echo "BUILD_PATH=build" >> $GITHUB_ENV
-          else
-            echo "Build failed to output dist or build directory."
-            exit 1
-          fi
+      - name: Create 404.html fallback for client-side routing
+        run: cp .output/public/index.html .output/public/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "./${{ env.BUILD_PATH }}"
+          path: ".output/public"
 
   deploy:
     environment:
