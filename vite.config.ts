@@ -6,28 +6,39 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+const isGitHubPages = process.env["GITHUB_PAGES"] === "true";
 // GitHub Pages project sites are served from /<repo>/; configure-pages sets BASE_PATH in CI.
-const base = process.env.BASE_PATH || "/";
+const base = process.env["BASE_PATH"] || "/";
+const basepath = base.replace(/\/$/, "") || "/";
 
 export default defineConfig({
-  base,
-  build: {
-    outDir: "dist",
+  vite: {
+    base,
+    build: {
+      outDir: "dist",
+    },
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
-    prerender: {
-      enabled: true,
-      crawlLinks: true,
-    },
     router: {
-      basepath: base.replace(/\/$/, "") || "/",
+      basepath,
     },
+    // Nitro's github-pages/static preset crashes this Nitro 3 beta (HTML used as an SSR
+    // entry). GitHub Pages gets a client-only shell instead; Lovable keeps Cloudflare SSR.
+    ...(isGitHubPages
+      ? {
+          spa: {
+            enabled: true,
+            prerender: {
+              outputPath: "/index.html",
+              crawlLinks: true,
+              retryCount: 3,
+            },
+          },
+        }
+      : {}),
   },
-  // Lovable Cloud still pins Cloudflare via LOVABLE_NITRO_PRESET; this is for GitHub Pages / local builds.
-  nitro: {
-    preset: "github_pages",
-  },
+  ...(isGitHubPages ? { nitro: false as const } : {}),
 });

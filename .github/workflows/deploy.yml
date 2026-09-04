@@ -1,4 +1,4 @@
-# Build the TanStack Start app as a static site and publish it to GitHub Pages.
+# Build the TanStack Start app as a static SPA and publish it to GitHub Pages.
 # Repo Settings → Pages → Source must be "GitHub Actions".
 name: Deploy to GitHub Pages
 
@@ -39,19 +39,35 @@ jobs:
       - name: Build static site
         run: bun run build
         env:
-          NITRO_PRESET: github_pages
+          GITHUB_PAGES: "true"
           BASE_PATH: ${{ steps.pages.outputs.base_path }}/
 
       - name: Prepare GitHub Pages files
+        id: static
         run: |
-          test -f .output/public/index.html
-          cp .output/public/index.html .output/public/404.html
-          touch .output/public/.nojekyll
+          if [ -f dist/client/index.html ]; then
+            OUT=dist/client
+          elif [ -f dist/index.html ]; then
+            OUT=dist
+          elif [ -f .output/public/index.html ]; then
+            OUT=.output/public
+          elif [ -f .output/public/_shell.html ]; then
+            OUT=.output/public
+            cp "$OUT/_shell.html" "$OUT/index.html"
+          else
+            echo "Static HTML output not found"
+            find dist .output -name '*.html' 2>/dev/null | head -50
+            exit 1
+          fi
+          echo "Using output directory: $OUT"
+          echo "pages_dir=$OUT" >> "$GITHUB_OUTPUT"
+          cp "$OUT/index.html" "$OUT/404.html"
+          touch "$OUT/.nojekyll"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .output/public
+          path: ${{ steps.static.outputs.pages_dir }}
 
   deploy:
     needs: build
