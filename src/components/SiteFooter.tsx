@@ -15,7 +15,7 @@ export function SiteFooter() {
             Breaking Barriers, Building Futures.
           </p>
           <p className="mx-auto mt-3 max-w-xl text-sm text-primary-foreground/80">
-            (9th Edition) Feed the Widow 2026 · 22nd February · Agbara Town Hall, Ogun State
+            A Widow, But Not Wasted
           </p>
 
           <div className="mx-auto mt-8 grid max-w-2xl gap-4 text-sm text-primary-foreground/80 sm:grid-cols-2">

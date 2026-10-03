@@ -9,7 +9,7 @@ export const Route = createFileRoute("/donate")({
       {
         name: "description",
         content:
-          "Support Feed the Widow 2026. Give financially via Wema Bank 0126951057, or donate food items via WhatsApp 08184344442.",
+          "Support Feed the Widow 2027. Give financially via Wema Bank 0126951057, or donate food items via WhatsApp 08184344442.",
       },
       { property: "og:title", content: "Support OLORI ADEOLA RELIEF FOUNDATION" },
       {
@@ -29,8 +29,8 @@ function Donate() {
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
             <h1 className="max-w-3xl font-display text-5xl text-gold">Support Our Cause</h1>
             <p className="mt-4 max-w-2xl text-lg text-primary-foreground/85">
-              Help resource the 9th Edition of Feed the Widow on 22nd February 2026 at Agbara Town
-              Hall — through a financial gift or food items delivered to the team.
+              Help resource the 10th Edition of Feed the Widow in 2027 at Agbara Town Hall — through
+              a financial gift or food items delivered to the team.
             </p>
           </div>
         </div>

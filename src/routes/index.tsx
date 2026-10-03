@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarDays, MapPin, Quote } from "lucide-react";
+import { useEffect, useState } from "react";
 import heroEvent from "@/assets/images/4cbc272c-cf61-47a5-b8bf-f5a327507180.jpg";
 import aboutGathering from "@/assets/images/c340594c-f1a3-476f-b2b6-9df753bab56b.jpg";
 import aboutDistribution from "@/assets/images/cae7d963-b395-45be-9089-680ea3d9c6da.jpg";
@@ -33,6 +34,57 @@ export const Route = createFileRoute("/")({
 });
 
 const heroAlt = "Beneficiaries and volunteers with food parcels outside Alamosun Town Hall, Agbara";
+
+const NEXT_EDITION = new Date("2027-02-01T00:00:00+01:00").getTime();
+
+function countdownParts(ms: number) {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  return {
+    days: Math.floor(total / 86400),
+    hours: Math.floor((total % 86400) / 3600),
+    minutes: Math.floor((total % 3600) / 60),
+    seconds: total % 60,
+  };
+}
+
+function EditionCountdown() {
+  const [now, setNow] = useState<number | null>(null);
+
+  useEffect(() => {
+    const tick = () => setNow(Date.now());
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const remaining = now === null ? null : countdownParts(NEXT_EDITION - now);
+
+  return (
+    <p className="inline-flex items-center gap-2 rounded-full bg-background/10 px-4 py-2">
+      <CalendarDays className="h-4 w-4 shrink-0 text-gold" />
+      {remaining ? (
+        <span className="inline-flex flex-wrap items-baseline gap-x-2 gap-y-0.5 tabular-nums">
+          {(
+            [
+              ["days", remaining.days],
+              ["hrs", remaining.hours],
+              ["min", remaining.minutes],
+              ["sec", remaining.seconds],
+            ] as const
+          ).map(([label, value]) => (
+            <span key={label} className="inline-flex items-baseline gap-1">
+              <span className="font-semibold text-gold">{String(value).padStart(2, "0")}</span>
+              <span className="text-primary-foreground/75">{label}</span>
+            </span>
+          ))}
+          <span>to February 2027</span>
+        </span>
+      ) : (
+        <span>Countdown to February 2027</span>
+      )}
+    </p>
+  );
+}
 
 const testimonials = [
   {
@@ -80,10 +132,7 @@ function Home() {
               A Widow, But Not Wasted
             </p>
             <div className="mt-6 flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap">
-              <p className="inline-flex items-center gap-2 rounded-full bg-background/10 px-4 py-2">
-                <CalendarDays className="h-4 w-4 text-gold" />
-                22nd February, 2026
-              </p>
+              <EditionCountdown />
               <p className="inline-flex items-center gap-2 rounded-full bg-background/10 px-4 py-2">
                 <MapPin className="h-4 w-4 text-gold" />
                 Agbara Town Hall, Ogun State

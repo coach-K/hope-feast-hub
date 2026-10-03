@@ -122,12 +122,14 @@ function Programs() {
         <div className="mt-10">
           <DonatePathways />
         </div>
-        <Link
-          to="/gallery"
-          className="mt-8 inline-block rounded-full border border-primary px-6 py-3 font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-        >
-          View the gallery
-        </Link>
+        <div className="mt-8 flex justify-center">
+          <Link
+            to="/gallery"
+            className="inline-block rounded-full border border-primary px-6 py-3 font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+          >
+            View the gallery
+          </Link>
+        </div>
       </section>
     </>
   );
