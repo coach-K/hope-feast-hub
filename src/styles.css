@@ -103,3 +103,56 @@
   background-color: var(--primary-deep);
   color: var(--primary-foreground);
 }
+
+@keyframes gallery-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gallery-slide-next {
+  from {
+    opacity: 0.35;
+    transform: translateX(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gallery-slide-prev {
+  from {
+    opacity: 0.35;
+    transform: translateX(-1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.gallery-reveal {
+  animation: gallery-reveal 450ms ease both;
+}
+
+.gallery-slide-next {
+  animation: gallery-slide-next 280ms ease both;
+}
+
+.gallery-slide-prev {
+  animation: gallery-slide-prev 280ms ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-reveal,
+  .gallery-slide-next,
+  .gallery-slide-prev {
+    animation: none;
+  }
+}

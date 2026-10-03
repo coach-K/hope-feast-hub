@@ -1,8 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PhotoGallery } from "@/components/PhotoGallery";
-import { outreachPhotos } from "@/lib/outreach-photos";
+import {
+  GALLERY_BATCH_SIZE,
+  GALLERY_INITIAL_VISIBLE_COUNT,
+  PhotoGallery,
+} from "@/components/PhotoGallery";
+import { ALL_GALLERY_IMAGES } from "@/lib/outreach-photos";
+
+type GallerySearch = {
+  more?: boolean;
+};
 
 export const Route = createFileRoute("/gallery")({
+  validateSearch: (search: Record<string, unknown>): GallerySearch => {
+    const more = search.more === true || search.more === "true" || search.more === "1";
+    return more ? { more: true } : {};
+  },
   head: () => ({
     meta: [
       { title: "Gallery — OLORI ADEOLA RELIEF FOUNDATION" },
@@ -22,6 +34,8 @@ export const Route = createFileRoute("/gallery")({
 });
 
 function Gallery() {
+  const { more } = Route.useSearch();
+
   return (
     <>
       <section className="surface-deep">
@@ -29,7 +43,7 @@ function Gallery() {
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
             <h1 className="font-display text-5xl text-gold">Gallery</h1>
             <p className="mt-4 max-w-2xl text-lg text-primary-foreground/85">
-              {outreachPhotos.length} photographs from food relief, medical outreach, and the
+              {ALL_GALLERY_IMAGES.length} photographs from food relief, medical outreach, and the
               communities the foundation serves. Open any image to view it larger.
             </p>
           </div>
@@ -37,7 +51,13 @@ function Gallery() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <PhotoGallery photos={outreachPhotos} />
+        <PhotoGallery
+          initialVisibleCount={
+            more === true
+              ? GALLERY_INITIAL_VISIBLE_COUNT + GALLERY_BATCH_SIZE
+              : GALLERY_INITIAL_VISIBLE_COUNT
+          }
+        />
 
         <div className="mt-14 rounded-3xl bg-secondary/70 p-8 text-center">
           <h2 className="font-display text-3xl text-primary-deep">
