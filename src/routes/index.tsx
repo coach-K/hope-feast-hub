@@ -11,7 +11,6 @@ import { FocusAreas } from "@/components/FocusAreas";
 import { FounderSpotlight } from "@/components/FounderSpotlight";
 import { ImpactVideo } from "@/components/ImpactVideo";
 import { PhotoGallery } from "@/components/PhotoGallery";
-import { outreachPhotos } from "@/lib/outreach-photos";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,10 +32,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const heroAlt =
-  "Beneficiaries and volunteers with food parcels outside Alamosun Town Hall, Agbara";
-
-const homePhotos = outreachPhotos.slice(0, 10);
+const heroAlt = "Beneficiaries and volunteers with food parcels outside Alamosun Town Hall, Agbara";
 
 const testimonials = [
   {
@@ -254,14 +250,17 @@ function Home() {
           Select any image to view it larger.
         </p>
         <div className="mt-10">
-          <PhotoGallery photos={homePhotos} />
+          <PhotoGallery paging={false} />
         </div>
-        <Link
-          to="/gallery"
-          className="mt-8 inline-block rounded-full border border-primary px-6 py-3 font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-        >
-          See more
-        </Link>
+        <div className="mt-8 flex justify-center">
+          <Link
+            to="/gallery"
+            search={{ more: true }}
+            className="inline-block rounded-full border border-primary px-6 py-3 font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+          >
+            See more
+          </Link>
+        </div>
       </section>
 
       <section className="bg-secondary/60">
