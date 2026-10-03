@@ -5,16 +5,16 @@ import { DonatePathways } from "@/components/DonatePathways";
 export const Route = createFileRoute("/donate")({
   head: () => ({
     meta: [
-      { title: "Donate — Olori Adeola Relief Foundation" },
+      { title: "Support Our Cause — OLORI ADEOLA RELIEF FOUNDATION" },
       {
         name: "description",
         content:
-          "Give financially via Wema Bank 0126951057, or donate food items directly via WhatsApp 08184344442.",
+          "Support Feed the Widow 2026. Give financially via Wema Bank 0126951057, or donate food items via WhatsApp 08184344442.",
       },
-      { property: "og:title", content: "How You Can Be Part of the Solution" },
+      { property: "og:title", content: "Support OLORI ADEOLA RELIEF FOUNDATION" },
       {
         property: "og:description",
-        content: "Support the Widows Food Bank with funds or food items.",
+        content: "Stand with widows and vulnerable families through funds or food items.",
       },
     ],
   }),
@@ -27,11 +27,10 @@ function Donate() {
       <section className="surface-deep">
         <div className="adire-pattern">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-            <h1 className="max-w-3xl font-display text-5xl text-gold">
-              How You Can Be Part of the Solution.
-            </h1>
+            <h1 className="max-w-3xl font-display text-5xl text-gold">Support Our Cause</h1>
             <p className="mt-4 max-w-2xl text-lg text-primary-foreground/85">
-              Two clear pathways to stand with a widow this month.
+              Help resource the 9th Edition of Feed the Widow on 22nd February 2026 at Agbara Town
+              Hall — through a financial gift or food items delivered to the team.
             </p>
           </div>
         </div>

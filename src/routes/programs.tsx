@@ -1,118 +1,124 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import foodImg from "@/assets/food-staples.jpg";
-import heroImg from "@/assets/hero-distribution.jpg";
+import { CalendarDays, MapPin } from "lucide-react";
+import heroEvent from "@/assets/images/24908c36-3363-416e-b3c2-60c2bc2d1322.jpg";
+import foodParcels from "@/assets/images/47c0d6db-098f-4ee8-aa96-2c7282e76bbd.jpg";
+import outreachTeam from "@/assets/images/aa585078-0a63-41cf-9c30-3c17c28f80b9.jpg";
+import townHall from "@/assets/images/75f62dff-d934-4b5f-8665-88fb9f58d0be.jpg";
 import { DonatePathways } from "@/components/DonatePathways";
+import { FocusAreas } from "@/components/FocusAreas";
 
 export const Route = createFileRoute("/programs")({
   head: () => ({
     meta: [
-      { title: "Our Programs — Widows Food Bank" },
+      { title: "Outreach Details — Feed the Widow 2026" },
       {
         name: "description",
         content:
-          "Inside the Widows Food Bank: bulk staples, organised distributions and the Feed the Widow Program 2025.",
+          "9th Edition Feed the Widow, 22nd February 2026 at Agbara Town Hall, Ogun State. Food distribution, medical care, and community outreach by Olori Adeola Relief Foundation.",
       },
-      { property: "og:title", content: "Widows Food Bank: Providing Relief and Hope" },
+      { property: "og:title", content: "(9TH EDITION) FEED THE WIDOW 2026" },
       {
         property: "og:description",
-        content: "How the Widows Food Bank works and how you can support it.",
+        content: "22nd February 2026 · Agbara Town Hall, Ogun State.",
       },
     ],
   }),
   component: Programs,
 });
 
-const steps = [
-  {
-    n: "01",
-    title: "Identify & register",
-    body: "Widows are referred by community leaders and registered with household details, so support is fair and traceable.",
-  },
-  {
-    n: "02",
-    title: "Purchase in bulk",
-    body: "Donations are pooled to buy rice, semovita, beverages and oil at wholesale prices — more food per naira given.",
-  },
-  {
-    n: "03",
-    title: "Pack & distribute",
-    body: "Volunteers assemble balanced household parcels and hand them out at scheduled, orderly outreaches.",
-  },
-  {
-    n: "04",
-    title: "Follow up",
-    body: "We check in between distributions and connect widows to skills and small-trade support where possible.",
-  },
-];
-
 function Programs() {
   return (
     <>
-      <section className="surface-deep">
-        <div className="adire-pattern">
+      <section className="relative isolate overflow-hidden text-primary-foreground">
+        <img
+          src={heroEvent}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-primary-deep/82" />
+        <div className="adire-pattern relative">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-            <h1 className="max-w-3xl font-display text-5xl text-gold">
-              Widows Food Bank: Providing Relief and Hope.
-            </h1>
-            <p className="mt-4 max-w-2xl text-lg text-primary-foreground/85">
-              Our flagship program with one objective: ensure no widow goes hungry.
+            <p className="text-xs font-semibold tracking-[0.22em] text-gold uppercase">
+              OLORI ADEOLA RELIEF FOUNDATION
             </p>
-            <span className="mt-6 inline-block rounded-full bg-gold px-5 py-2 text-sm font-semibold text-gold-foreground">
-              Feed the Widow Program 2025 — ongoing
-            </span>
+            <h1 className="mt-4 max-w-3xl font-display text-5xl text-gold">
+              (9TH EDITION) FEED THE WIDOW 2026
+            </h1>
+            <div className="mt-6 flex flex-col gap-3 text-sm sm:flex-row">
+              <p className="inline-flex items-center gap-2 rounded-full bg-background/10 px-4 py-2">
+                <CalendarDays className="h-4 w-4 text-gold" />
+                22nd February, 2026
+              </p>
+              <p className="inline-flex items-center gap-2 rounded-full bg-background/10 px-4 py-2">
+                <MapPin className="h-4 w-4 text-gold" />
+                Agbara Town Hall, Ogun State
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <h2 className="font-display text-4xl text-primary-deep">How the program works</h2>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2">
-          {steps.map((s) => (
-            <article key={s.n} className="rounded-3xl border border-border bg-card p-7 shadow-soft">
-              <span className="font-display text-3xl text-gold">{s.n}</span>
-              <h3 className="mt-2 font-display text-2xl text-primary-deep">{s.title}</h3>
-              <p className="mt-2 text-muted-foreground">{s.body}</p>
-            </article>
-          ))}
+        <h2 className="font-display text-4xl text-primary-deep">Outreach details</h2>
+        <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
+          The 9th edition brings widows and vulnerable families together for food distribution,
+          medical care and treatment support, and the kind of community presence that restores
+          dignity. The gathering is at Agbara Town Hall, Ogun State, on 22nd February, 2026.
+        </p>
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <figure className="overflow-hidden rounded-3xl bg-card shadow-soft md:col-span-2">
+            <img
+              src={townHall}
+              alt="Beneficiaries and volunteers gathered with food parcels outside Agbara town hall"
+              loading="lazy"
+              decoding="async"
+              className="h-80 w-full object-cover"
+            />
+          </figure>
+          <figure className="overflow-hidden rounded-3xl bg-card shadow-soft">
+            <img
+              src={heroEvent}
+              alt="Event setup and venue prepared for the Feed the Widow outreach"
+              loading="lazy"
+              decoding="async"
+              className="h-80 w-full object-cover"
+            />
+          </figure>
+          <figure className="overflow-hidden rounded-3xl bg-card shadow-soft">
+            <img
+              src={foodParcels}
+              alt="Stacks of labeled food packages prepared for widow households"
+              loading="lazy"
+              decoding="async"
+              className="h-72 w-full object-cover"
+            />
+            <figcaption className="p-5 text-muted-foreground">
+              Food packages and staple supplies for widow households.
+            </figcaption>
+          </figure>
+          <figure className="overflow-hidden rounded-3xl bg-card shadow-soft md:col-span-2">
+            <img
+              src={outreachTeam}
+              alt="Volunteers and assistants ready for a community food distribution"
+              loading="lazy"
+              decoding="async"
+              className="h-72 w-full object-cover"
+            />
+            <figcaption className="p-5 text-muted-foreground">
+              Volunteers and assistants who carry the outreach from packing to distribution.
+            </figcaption>
+          </figure>
         </div>
       </section>
 
-      <section className="bg-secondary/60">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <h2 className="font-display text-4xl text-primary-deep">The support we provide</h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <figure className="overflow-hidden rounded-3xl bg-card shadow-soft">
-              <img
-                src={foodImg}
-                alt="Stacked staples: rice bags, semovita cartons, milk tins and cooking oil"
-                loading="lazy"
-                width={1200}
-                height={912}
-                className="h-80 w-full object-cover"
-              />
-              <figcaption className="p-6 text-muted-foreground">
-                Bulk staples — rice, semovita, beverages, oil — sorted for household parcels.
-              </figcaption>
-            </figure>
-            <figure className="overflow-hidden rounded-3xl bg-card shadow-soft">
-              <img
-                src={heroImg}
-                alt="Beneficiaries smiling as they collect their food packages"
-                loading="lazy"
-                width={1600}
-                height={1104}
-                className="h-80 w-full object-cover"
-              />
-              <figcaption className="p-6 text-muted-foreground">
-                Beneficiaries collecting parcels at an organised community distribution.
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
+      <FocusAreas />
 
-      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <h2 className="font-display text-4xl text-primary-deep">Fuel the next distribution</h2>
+      <section className="mx-auto max-w-6xl px-4 py-8 pb-20 sm:px-6">
+        <h2 className="font-display text-4xl text-primary-deep">Get involved</h2>
+        <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+          Contributions purchase food, support medical assistance, and keep the outreach organised.
+        </p>
         <div className="mt-10">
           <DonatePathways />
         </div>
@@ -120,7 +126,7 @@ function Programs() {
           to="/gallery"
           className="mt-8 inline-block rounded-full border border-primary px-6 py-3 font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
         >
-          See the gallery
+          View the gallery
         </Link>
       </section>
     </>
