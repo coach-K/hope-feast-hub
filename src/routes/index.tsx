@@ -77,10 +77,10 @@ function EditionCountdown() {
               <span className="text-primary-foreground/75">{label}</span>
             </span>
           ))}
-          <span>to February 2027</span>
+          <span>to 2027</span>
         </span>
       ) : (
-        <span>Countdown to February 2027</span>
+        <span>Countdown to 2027</span>
       )}
     </p>
   );
