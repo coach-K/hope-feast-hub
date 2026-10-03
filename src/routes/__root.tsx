@@ -80,13 +80,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Olori Adeola Relief Foundation" },
+      { title: "OLORI ADEOLA RELIEF FOUNDATION" },
       {
         name: "description",
         content:
-          "Empowering widows through the Widows Food Bank. Breaking Barriers, Building Futures.",
+          "Olori Adeola Relief Foundation — Breaking Barriers, Building Futures. Feed the Widow 2026, 22nd February, Agbara Town Hall, Ogun State.",
       },
-      { name: "author", content: "Olori Adeola Relief Foundation" },
+      { name: "author", content: "OLORI ADEOLA RELIEF FOUNDATION" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -101,7 +101,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
       },
-      { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.svg`, type: "image/svg+xml" },
+      { rel: "icon", href: `${import.meta.env.BASE_URL}logo.jpg`, type: "image/jpeg" },
+      { rel: "apple-touch-icon", href: `${import.meta.env.BASE_URL}logo.jpg` },
     ],
   }),
 

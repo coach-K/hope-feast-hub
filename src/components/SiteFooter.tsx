@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Linkedin, MapPin, Phone } from "lucide-react";
+import { Facebook, Instagram, MapPin, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 
 export function SiteFooter() {
@@ -13,6 +13,9 @@ export function SiteFooter() {
 
           <p className="mx-auto mt-8 max-w-xl font-display text-2xl text-gold">
             Breaking Barriers, Building Futures.
+          </p>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-primary-foreground/80">
+            (9th Edition) Feed the Widow 2026 · 22nd February · Agbara Town Hall, Ogun State
           </p>
 
           <div className="mx-auto mt-8 grid max-w-2xl gap-4 text-sm text-primary-foreground/80 sm:grid-cols-2">
@@ -31,13 +34,22 @@ export function SiteFooter() {
 
           <div className="mt-8 flex justify-center gap-3">
             {[
-              { Icon: Facebook, label: "Facebook" },
-              { Icon: Instagram, label: "Instagram" },
-              { Icon: Linkedin, label: "LinkedIn" },
-            ].map(({ Icon, label }) => (
+              {
+                Icon: Facebook,
+                label: "Facebook",
+                href: "https://web.facebook.com/adeola.agunbiade.754",
+              },
+              {
+                Icon: Instagram,
+                label: "Instagram",
+                href: "https://www.instagram.com/adeola.agunbiade.754/",
+              },
+            ].map(({ Icon, label, href }) => (
               <a
                 key={label}
-                href="#"
+                href={href}
+                target="_blank"
+                rel="noreferrer"
                 aria-label={label}
                 className="rounded-full border border-primary-foreground/25 p-2.5 text-primary-foreground/85 transition-colors hover:border-gold hover:text-gold"
               >
