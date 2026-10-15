@@ -33,10 +33,11 @@ export function FounderSpotlight() {
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
             Driven by empathy, unwavering faith, and a heart for service, Olori Adeola founded the
-            Olori Adeola Relief Foundation to be a beacon of hope for widows, orphans, and
+            Olori Adeola Relief Foundation to be a beacon of hope for widows, young girls, youth, and
             underserved communities. With a passion for sustainable relief and social dignity, she
-            continues to pioneer annual outreaches, medical interventions, and food distribution
-            initiatives that impact hundreds of families across Ogun State and beyond.
+            continues to pioneer widows&apos; outreaches, school visits, back to school support, aged
+            care, medical interventions, and food distribution that reach families across Ogun State
+            and beyond.
           </p>
 
           <blockquote className="mt-8 border-l-4 border-gold bg-card px-6 py-5 shadow-soft">
@@ -47,7 +48,7 @@ export function FounderSpotlight() {
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
-              href="https://wa.me/2348184344442"
+              href="https://wa.me/2347033333130"
               className="inline-flex items-center gap-2 rounded-full bg-ember px-5 py-3 text-sm font-semibold text-ember-foreground"
             >
               <MessageCircle className="h-4 w-4" />

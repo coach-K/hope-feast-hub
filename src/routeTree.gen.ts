@@ -14,6 +14,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as ProgramsIndexRouteImport } from './routes/programs.index'
+import { Route as ProgramsAgedCareRouteImport } from './routes/programs.aged-care'
+import { Route as ProgramsBackToSchoolRouteImport } from './routes/programs.back-to-school'
+import { Route as ProgramsSchoolOutreachRouteImport } from './routes/programs.school-outreach'
+import { Route as ProgramsWidowsRouteImport } from './routes/programs.widows'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,20 +45,54 @@ const ProgramsRoute = ProgramsRouteImport.update({
   path: '/programs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgramsIndexRoute = ProgramsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProgramsRoute,
+} as any)
+const ProgramsAgedCareRoute = ProgramsAgedCareRouteImport.update({
+  id: '/aged-care',
+  path: '/aged-care',
+  getParentRoute: () => ProgramsRoute,
+} as any)
+const ProgramsBackToSchoolRoute = ProgramsBackToSchoolRouteImport.update({
+  id: '/back-to-school',
+  path: '/back-to-school',
+  getParentRoute: () => ProgramsRoute,
+} as any)
+const ProgramsSchoolOutreachRoute = ProgramsSchoolOutreachRouteImport.update({
+  id: '/school-outreach',
+  path: '/school-outreach',
+  getParentRoute: () => ProgramsRoute,
+} as any)
+const ProgramsWidowsRoute = ProgramsWidowsRouteImport.update({
+  id: '/widows',
+  path: '/widows',
+  getParentRoute: () => ProgramsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
-  '/programs': typeof ProgramsRoute
+  '/programs': typeof ProgramsRouteWithChildren
+  '/programs/aged-care': typeof ProgramsAgedCareRoute
+  '/programs/back-to-school': typeof ProgramsBackToSchoolRoute
+  '/programs/school-outreach': typeof ProgramsSchoolOutreachRoute
+  '/programs/widows': typeof ProgramsWidowsRoute
+  '/programs/': typeof ProgramsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
-  '/programs': typeof ProgramsRoute
+  '/programs/aged-care': typeof ProgramsAgedCareRoute
+  '/programs/back-to-school': typeof ProgramsBackToSchoolRoute
+  '/programs/school-outreach': typeof ProgramsSchoolOutreachRoute
+  '/programs/widows': typeof ProgramsWidowsRoute
+  '/programs': typeof ProgramsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,14 +100,49 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
-  '/programs': typeof ProgramsRoute
+  '/programs': typeof ProgramsRouteWithChildren
+  '/programs/aged-care': typeof ProgramsAgedCareRoute
+  '/programs/back-to-school': typeof ProgramsBackToSchoolRoute
+  '/programs/school-outreach': typeof ProgramsSchoolOutreachRoute
+  '/programs/widows': typeof ProgramsWidowsRoute
+  '/programs/': typeof ProgramsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/donate' | '/gallery' | '/programs'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/donate'
+    | '/gallery'
+    | '/programs'
+    | '/programs/aged-care'
+    | '/programs/back-to-school'
+    | '/programs/school-outreach'
+    | '/programs/widows'
+    | '/programs/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/donate' | '/gallery' | '/programs'
-  id: '__root__' | '/' | '/about' | '/donate' | '/gallery' | '/programs'
+  to:
+    | '/'
+    | '/about'
+    | '/donate'
+    | '/gallery'
+    | '/programs/aged-care'
+    | '/programs/back-to-school'
+    | '/programs/school-outreach'
+    | '/programs/widows'
+    | '/programs'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/donate'
+    | '/gallery'
+    | '/programs'
+    | '/programs/aged-care'
+    | '/programs/back-to-school'
+    | '/programs/school-outreach'
+    | '/programs/widows'
+    | '/programs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,7 +150,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   DonateRoute: typeof DonateRoute
   GalleryRoute: typeof GalleryRoute
-  ProgramsRoute: typeof ProgramsRoute
+  ProgramsRoute: typeof ProgramsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -116,15 +190,70 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/programs/': {
+      id: '/programs/'
+      path: '/'
+      fullPath: '/programs/'
+      preLoaderRoute: typeof ProgramsIndexRouteImport
+      parentRoute: typeof ProgramsRoute
+    }
+    '/programs/aged-care': {
+      id: '/programs/aged-care'
+      path: '/aged-care'
+      fullPath: '/programs/aged-care'
+      preLoaderRoute: typeof ProgramsAgedCareRouteImport
+      parentRoute: typeof ProgramsRoute
+    }
+    '/programs/back-to-school': {
+      id: '/programs/back-to-school'
+      path: '/back-to-school'
+      fullPath: '/programs/back-to-school'
+      preLoaderRoute: typeof ProgramsBackToSchoolRouteImport
+      parentRoute: typeof ProgramsRoute
+    }
+    '/programs/school-outreach': {
+      id: '/programs/school-outreach'
+      path: '/school-outreach'
+      fullPath: '/programs/school-outreach'
+      preLoaderRoute: typeof ProgramsSchoolOutreachRouteImport
+      parentRoute: typeof ProgramsRoute
+    }
+    '/programs/widows': {
+      id: '/programs/widows'
+      path: '/widows'
+      fullPath: '/programs/widows'
+      preLoaderRoute: typeof ProgramsWidowsRouteImport
+      parentRoute: typeof ProgramsRoute
+    }
   }
 }
+
+interface ProgramsRouteChildren {
+  ProgramsAgedCareRoute: typeof ProgramsAgedCareRoute
+  ProgramsBackToSchoolRoute: typeof ProgramsBackToSchoolRoute
+  ProgramsSchoolOutreachRoute: typeof ProgramsSchoolOutreachRoute
+  ProgramsWidowsRoute: typeof ProgramsWidowsRoute
+  ProgramsIndexRoute: typeof ProgramsIndexRoute
+}
+
+const ProgramsRouteChildren: ProgramsRouteChildren = {
+  ProgramsAgedCareRoute: ProgramsAgedCareRoute,
+  ProgramsBackToSchoolRoute: ProgramsBackToSchoolRoute,
+  ProgramsSchoolOutreachRoute: ProgramsSchoolOutreachRoute,
+  ProgramsWidowsRoute: ProgramsWidowsRoute,
+  ProgramsIndexRoute: ProgramsIndexRoute,
+}
+
+const ProgramsRouteWithChildren = ProgramsRoute._addFileChildren(
+  ProgramsRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   DonateRoute: DonateRoute,
   GalleryRoute: GalleryRoute,
-  ProgramsRoute: ProgramsRoute,
+  ProgramsRoute: ProgramsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

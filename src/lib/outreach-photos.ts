@@ -1,14 +1,27 @@
-const modules = import.meta.glob("../assets/images/*.{jpg,jpeg,png,webp}", {
+import { girlChildCaptionFromPath, girlChildPhotoId, girlChildSchools } from "@/lib/girl-child";
+
+const modules = import.meta.glob("../assets/images/**/*.{jpg,jpeg,png,webp}", {
   eager: true,
   import: "default",
 });
+
+const GALLERY_CATEGORIES = [
+  "Girl Child Day",
+  "Widows Relief",
+  "Community Outreaches",
+  "Back to School",
+  "Aged Care",
+] as const;
+
+export type GalleryCategory = (typeof GALLERY_CATEGORIES)[number];
+export type GalleryFilter = "All" | GalleryCategory;
 
 export type GalleryImage = {
   id: string;
   src: string;
   alt: string;
   caption: string;
-  category: string;
+  category: GalleryCategory;
 };
 
 export type OutreachPhoto = GalleryImage;
@@ -30,65 +43,111 @@ const captions: Record<string, string> = {
     "Beneficiaries and volunteers gathered with food parcels outside Agbara town hall",
 };
 
+const featuredSchool = girlChildSchools[0];
 const featuredFirst = [
+  featuredSchool ? girlChildPhotoId(featuredSchool.slug, "13.jpg") : "",
+  featuredSchool ? girlChildPhotoId(featuredSchool.slug, "07.jpg") : "",
+  featuredSchool ? girlChildPhotoId(featuredSchool.slug, "18.jpg") : "",
   "3e769d6d-8321-4cf7-9d07-14dc089fc70a",
   "802f169c-7a6a-4b0e-9da0-c97563995f3b",
   "75f62dff-d934-4b5f-8665-88fb9f58d0be",
-];
+].filter(Boolean);
 
 const defaultCaption = "Outreach photograph from the Olori Adeola Relief Foundation";
 
-const knownCategories: Record<string, string> = {
-  "24908c36-3363-416e-b3c2-60c2bc2d1322": "Feed the Widow",
-  "3c8cbb2b-cd58-4be7-bdfa-d48a930a02d9": "Dignity and inclusion",
-  "3e769d6d-8321-4cf7-9d07-14dc089fc70a": "Feed the Widow",
-  "5abbe135-0b1d-4ff4-a752-aa090c7026ce": "Community outreach",
-  "5de07678-79b9-4c14-ae10-804faa8e4c4c": "Food distribution",
-  "75f62dff-d934-4b5f-8665-88fb9f58d0be": "Food distribution",
-  "802f169c-7a6a-4b0e-9da0-c97563995f3b": "Community outreach",
-};
+const communityIds = new Set([
+  "5abbe135-0b1d-4ff4-a752-aa090c7026ce",
+  "802f169c-7a6a-4b0e-9da0-c97563995f3b",
+]);
 
 function asSrc(value: unknown): string | null {
   return typeof value === "string" && value.length > 0 ? value : null;
 }
 
-function categoryFor(id: string, caption: string | undefined): string {
-  if (knownCategories[id]) return knownCategories[id];
-  if (!caption) return "Outreach";
-  const text = caption.toLowerCase();
-  if (/food|parcel|staple|rice|distribution/.test(text)) return "Food distribution";
-  if (/medical|health|clinic/.test(text)) return "Medical care";
-  if (/widow|dignit|famil/.test(text)) return "Dignity and inclusion";
-  if (/volunteer|gather|community|team/.test(text)) return "Community outreach";
-  return "Outreach";
+function categoryFor(path: string, id: string): GalleryImage["category"] {
+  if (path.includes("/girl-child/")) return "Girl Child Day";
+  if (path.includes("/back-to-school/")) return "Back to School";
+  if (path.includes("/aged-care/")) return "Aged Care";
+  if (communityIds.has(id)) return "Community Outreaches";
+  return "Widows Relief";
 }
 
-export const ALL_GALLERY_IMAGES: GalleryImage[] = Object.entries(modules)
-  .flatMap(([path, value]) => {
+function captionFor(path: string, id: string): string {
+  if (path.includes("/girl-child/")) return girlChildCaptionFromPath(path);
+  if (path.includes("/back-to-school/")) return "Back to School outreach photograph";
+  if (path.includes("/aged-care/")) return "Aged Care outreach photograph";
+  return captions[id] ?? defaultCaption;
+}
+
+const categoryOrder: GalleryImage["category"][] = [...GALLERY_CATEGORIES];
+
+export const ALL_GALLERY_IMAGES: GalleryImage[] = (() => {
+  const images = Object.entries(modules).flatMap(([path, value]) => {
     const src = asSrc(value);
     const file = path.split("/").pop() ?? "";
-    if (!src || /^logo\./i.test(file)) return [];
-    const id = file.replace(/\.(jpe?g|png|webp)$/i, "");
-    const caption = captions[id] ?? defaultCaption;
+    if (!src || /^(logo|founder)\./i.test(file)) return [];
+    const id = path.includes("/girl-child/")
+      ? girlChildPhotoId(
+          path.split("/girl-child/")[1]?.split("/")[0] ?? "",
+          file,
+        )
+      : file.replace(/\.(jpe?g|png|webp)$/i, "");
+    const caption = captionFor(path, id);
     return [
       {
         id,
         src,
         alt: caption,
         caption,
-        category: categoryFor(id, captions[id]),
+        category: categoryFor(path, id),
       },
     ];
-  })
-  .sort((a, b) => {
-    const aRank = featuredFirst.indexOf(a.id);
-    const bRank = featuredFirst.indexOf(b.id);
-    if (aRank !== -1 || bRank !== -1) {
-      if (aRank === -1) return 1;
-      if (bRank === -1) return -1;
-      return aRank - bRank;
-    }
-    return a.id.localeCompare(b.id);
   });
+
+  const featured: GalleryImage[] = [];
+  const buckets = new Map<GalleryImage["category"], GalleryImage[]>();
+
+  for (const image of images) {
+    const rank = featuredFirst.indexOf(image.id);
+    if (rank !== -1) {
+      featured[rank] = image;
+      continue;
+    }
+    const list = buckets.get(image.category) ?? [];
+    list.push(image);
+    buckets.set(image.category, list);
+  }
+
+  for (const list of buckets.values()) {
+    list.sort((a, b) => a.id.localeCompare(b.id));
+  }
+
+  const mixed: GalleryImage[] = [];
+  let pending = true;
+  while (pending) {
+    pending = false;
+    for (const category of categoryOrder) {
+      const next = buckets.get(category)?.shift();
+      if (next) {
+        mixed.push(next);
+        pending = true;
+      }
+    }
+  }
+
+  return [...featured.filter(Boolean), ...mixed];
+})();
+
+export const GALLERY_FILTERS: GalleryFilter[] = [
+  "All",
+  ...GALLERY_CATEGORIES.filter((category) =>
+    ALL_GALLERY_IMAGES.some((photo) => photo.category === category),
+  ),
+];
+
+export function imagesForFilter(filter: GalleryFilter): GalleryImage[] {
+  if (filter === "All") return ALL_GALLERY_IMAGES;
+  return ALL_GALLERY_IMAGES.filter((photo) => photo.category === filter);
+}
 
 export const outreachPhotos: OutreachPhoto[] = ALL_GALLERY_IMAGES;

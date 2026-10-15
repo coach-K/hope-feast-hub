@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Olori Adeola Relief Foundation — Breaking Barriers, Building Futures. Feed the Widow 2026, 22nd February, Agbara Town Hall, Ogun State.",
+          "Olori Adeola Relief Foundation — Breaking Barriers, Building Futures. Empowering widows, nurturing young girls, and supporting vulnerable communities.",
       },
       { name: "author", content: "OLORI ADEOLA RELIEF FOUNDATION" },
       { property: "og:type", content: "website" },

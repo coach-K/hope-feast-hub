@@ -15,7 +15,7 @@ export function SiteFooter() {
             Breaking Barriers, Building Futures.
           </p>
           <p className="mx-auto mt-3 max-w-xl text-sm text-primary-foreground/80">
-            A Widow, But Not Wasted
+            Empowering widows, nurturing young girls, and supporting vulnerable communities.
           </p>
 
           <div className="mx-auto mt-8 grid max-w-2xl gap-4 text-sm text-primary-foreground/80 sm:grid-cols-2">
@@ -24,11 +24,11 @@ export function SiteFooter() {
               Olori Adeola&apos;s Place, Agbara Estate, Agbara, Ogun State
             </p>
             <a
-              href="https://wa.me/2348184344442"
+              href="https://wa.me/2347033333130"
               className="flex items-center justify-center gap-2 hover:text-gold"
             >
               <Phone className="h-4 w-4 shrink-0 text-gold" />
-              WhatsApp 08184344442
+              WhatsApp +2347033333130
             </a>
           </div>
 

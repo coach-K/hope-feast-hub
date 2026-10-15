@@ -1,24 +1,24 @@
-import { Heart, Stethoscope, Users, Utensils } from "lucide-react";
+import { BookOpen, GraduationCap, Heart, HeartHandshake } from "lucide-react";
 
 const areas = [
   {
-    title: "Food distribution",
-    body: "Food distribution to widows and vulnerable families, so households have nutritious staples they can count on.",
-    Icon: Utensils,
+    title: "Widows",
+    body: "Food, healthcare, medical consultations, and empowerment support for widows and the dependents who rely on them.",
+    Icon: HeartHandshake,
   },
   {
-    title: "Medical care",
-    body: "Medical care and treatment support, including consultations and assistance for widows facing health challenges.",
-    Icon: Stethoscope,
+    title: "School outreach",
+    body: "Visits to schools for education, hygiene, health, and mentorship, including World Girl Child Day.",
+    Icon: GraduationCap,
   },
   {
-    title: "Community outreach",
-    body: "Community outreach and humanitarian assistance that meets people where they live, with organised, personal care.",
-    Icon: Users,
+    title: "Back to school",
+    body: "Books, uniforms, and help with fees so children can resume and remain in class.",
+    Icon: BookOpen,
   },
   {
-    title: "Dignity and inclusion",
-    body: "Promoting dignity, hope, and social inclusion so no widow or vulnerable person is left to suffer in silence.",
+    title: "Aged care",
+    body: "Food, health checks, and home visits for older people, including grandparents raising children.",
     Icon: Heart,
   },
 ];
@@ -32,8 +32,8 @@ export function FocusAreas() {
       <div className="mt-6 rounded-[2rem] bg-primary-deep px-7 py-10 text-primary-foreground shadow-lift sm:px-10">
         <h2 className="font-display text-3xl text-gold sm:text-4xl">Our Vision</h2>
         <p className="mt-4 max-w-3xl font-display text-2xl leading-snug text-primary-foreground/95 sm:text-3xl">
-          To build a society where widows and vulnerable individuals live with dignity, good health,
-          and renewed hope.
+          To build a society where widows, schoolchildren, and older people live with dignity, good
+          health, education, and renewed hope.
         </p>
       </div>
 
