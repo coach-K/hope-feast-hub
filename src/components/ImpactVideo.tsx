@@ -9,7 +9,7 @@ export function ImpactVideo() {
           See the work in motion.
         </h2>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          A look at how the foundation gathers widows, shares food, and restores dignity through
+          A look at how the foundation gathers widows, visits schools, and restores dignity through
           community outreach.
         </p>
         <div className="mt-8 aspect-video w-full overflow-hidden rounded-3xl bg-primary-deep shadow-lift">

@@ -1,6 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { ALL_GALLERY_IMAGES, type GalleryImage } from "@/lib/outreach-photos";
+import {
+  GALLERY_FILTERS,
+  imagesForFilter,
+  type GalleryFilter,
+  type GalleryImage,
+} from "@/lib/outreach-photos";
 
 export const GALLERY_INITIAL_VISIBLE_COUNT = 6;
 export const GALLERY_BATCH_SIZE = 6;
@@ -8,6 +13,7 @@ export const GALLERY_BATCH_SIZE = 6;
 type PhotoGalleryProps = {
   initialVisibleCount?: number;
   paging?: boolean;
+  initialFilter?: GalleryFilter;
 };
 
 const frameClass = [
@@ -28,23 +34,37 @@ function neighborIndexes(index: number, total: number): number[] {
 export function PhotoGallery({
   initialVisibleCount = GALLERY_INITIAL_VISIBLE_COUNT,
   paging = true,
+  initialFilter = "All",
 }: PhotoGalleryProps = {}) {
+  const [filter, setFilter] = useState<GalleryFilter>(initialFilter);
   const [visibleCount, setVisibleCount] = useState(initialVisibleCount);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [motion, setMotion] = useState<SlideMotion>("open");
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const dragRef = useRef<{ id: number; x: number; y: number; swiping: boolean } | null>(null);
 
-  const total = ALL_GALLERY_IMAGES.length;
-  const visibleImages = ALL_GALLERY_IMAGES.slice(0, visibleCount);
+  const photos = useMemo(() => imagesForFilter(filter), [filter]);
+  const total = photos.length;
+  const visibleImages = photos.slice(0, visibleCount);
   const shown = Math.min(visibleCount, total);
-  const current = activeIndex === null ? undefined : ALL_GALLERY_IMAGES[activeIndex];
+  const current = activeIndex === null ? undefined : photos[activeIndex];
 
   const indexById = useMemo(() => {
     const lookup = new Map<string, number>();
-    ALL_GALLERY_IMAGES.forEach((photo, index) => lookup.set(photo.id, index));
+    photos.forEach((photo, index) => lookup.set(photo.id, index));
     return lookup;
-  }, []);
+  }, [photos]);
+
+  useEffect(() => {
+    setFilter(initialFilter);
+  }, [initialFilter]);
+
+  useEffect(() => {
+    setVisibleCount(initialVisibleCount);
+    setActiveIndex(null);
+  }, [filter, initialVisibleCount]);
 
   const openAt = (photo: GalleryImage, trigger: HTMLButtonElement) => {
     const index = indexById.get(photo.id);
@@ -65,6 +85,62 @@ export function PhotoGallery({
       if (index === null || total === 0) return index;
       return (index + delta + total) % total;
     });
+  };
+
+  const clearDragOffset = () => {
+    const image = imageRef.current;
+    if (!image) return;
+    image.style.transition = "transform 180ms ease";
+    image.style.transform = "";
+  };
+
+  const onSwipeStart = (event: ReactPointerEvent<HTMLElement>) => {
+    if (total <= 1) return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    dragRef.current = { id: event.pointerId, x: event.clientX, y: event.clientY, swiping: false };
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      // The gesture still works if the pointer cannot be captured.
+    }
+  };
+
+  const onSwipeMove = (event: ReactPointerEvent<HTMLElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.id !== event.pointerId) return;
+    const dx = event.clientX - drag.x;
+    const dy = event.clientY - drag.y;
+    if (!drag.swiping) {
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      if (Math.abs(dy) > Math.abs(dx)) {
+        dragRef.current = null;
+        clearDragOffset();
+        return;
+      }
+      drag.swiping = true;
+    }
+    const image = imageRef.current;
+    if (!image) return;
+    image.style.transition = "none";
+    image.style.transform = `translateX(${dx}px)`;
+  };
+
+  const onSwipeEnd = (event: ReactPointerEvent<HTMLElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.id !== event.pointerId) return;
+    dragRef.current = null;
+    const dx = event.clientX - drag.x;
+    const dy = event.clientY - drag.y;
+    clearDragOffset();
+    if (Math.abs(dx) < 48 || Math.abs(dy) > Math.abs(dx)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    step(dx < 0 ? 1 : -1);
+  };
+
+  const onSwipeCancel = () => {
+    dragRef.current = null;
+    clearDragOffset();
   };
 
   useEffect(() => {
@@ -101,12 +177,13 @@ export function PhotoGallery({
   useEffect(() => {
     if (activeIndex === null || total === 0) return;
 
-    const preloaders = neighborIndexes(activeIndex, total).map((index) => {
-      const photo = ALL_GALLERY_IMAGES[index];
+    const preloaders = neighborIndexes(activeIndex, total).flatMap((index) => {
+      const photo = photos[index];
+      if (!photo) return [];
       const img = new Image();
       img.decoding = "async";
       img.src = photo.src;
-      return img;
+      return [img];
     });
 
     return () => {
@@ -116,35 +193,67 @@ export function PhotoGallery({
         img.src = "";
       });
     };
-  }, [activeIndex, total]);
+  }, [activeIndex, photos, total]);
 
   const slideClass =
     motion === "next" ? "gallery-slide-next" : motion === "prev" ? "gallery-slide-prev" : "gallery-reveal";
 
   return (
     <>
-      <div className="columns-2 gap-3 sm:columns-3 sm:gap-4 lg:columns-4">
-        {visibleImages.map((photo, index) => (
-          <button
-            key={photo.id}
-            type="button"
-            onClick={(event) => openAt(photo, event.currentTarget)}
-            aria-label={photo.alt}
-            className="gallery-reveal mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl bg-secondary shadow-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:mb-4"
-            style={{ animationDelay: `${(index % GALLERY_BATCH_SIZE) * 40}ms` }}
-          >
-            <img
-              src={photo.src}
-              alt={photo.alt}
-              loading="lazy"
-              decoding="async"
-              className={`w-full object-cover transition-transform duration-300 hover:scale-[1.03] ${frameClass[index % frameClass.length] ?? "aspect-square"}`}
-            />
-          </button>
-        ))}
+      <div role="tablist" aria-label="Gallery categories" className="mb-8 flex flex-wrap gap-2">
+        {GALLERY_FILTERS.map((option) => {
+          const selected = option === filter;
+          return (
+            <button
+              key={option}
+              type="button"
+              role="tab"
+              aria-selected={selected}
+              onClick={() => {
+                setFilter(option);
+                setActiveIndex(null);
+                setVisibleCount(initialVisibleCount);
+              }}
+              className={
+                selected
+                  ? "rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                  : "rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground/75 transition-colors hover:border-primary hover:text-primary"
+              }
+            >
+              {option}
+            </button>
+          );
+        })}
       </div>
 
-      {paging && (
+      {total === 0 ? (
+        <p className="rounded-3xl bg-secondary/70 px-6 py-10 text-center text-muted-foreground">
+          No photographs in this category yet.
+        </p>
+      ) : (
+        <div className="columns-2 gap-3 sm:columns-3 sm:gap-4 lg:columns-4">
+          {visibleImages.map((photo, index) => (
+            <button
+              key={`${filter}-${photo.id}`}
+              type="button"
+              onClick={(event) => openAt(photo, event.currentTarget)}
+              aria-label={photo.alt}
+              className="gallery-reveal mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl bg-secondary shadow-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:mb-4"
+              style={{ animationDelay: `${(index % GALLERY_BATCH_SIZE) * 40}ms` }}
+            >
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                loading="lazy"
+                decoding="async"
+                className={`w-full object-cover transition-transform duration-300 hover:scale-[1.03] ${frameClass[index % frameClass.length] ?? "aspect-square"}`}
+              />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {paging && total > 0 && (
         <div className="mt-6 flex flex-col items-center gap-4">
           <p className="text-sm text-muted-foreground">
             Showing {shown} of {total} photos
@@ -172,8 +281,8 @@ export function PhotoGallery({
           onClick={close}
         >
           <p className="sr-only">
-            Photograph {activeIndex + 1} of {total}. Use the left and right arrow keys to browse,
-            or escape to close.
+            Photograph {activeIndex + 1} of {total}. Swipe the photograph, or use the left and right
+            arrow keys, to browse. Escape closes.
           </p>
           <button
             type="button"
@@ -195,15 +304,21 @@ export function PhotoGallery({
             <ChevronLeft className="h-6 w-6" />
           </button>
           <figure
-            className="max-h-full max-w-5xl"
+            className="max-h-full max-w-5xl touch-none select-none"
             onClick={(event) => event.stopPropagation()}
+            onPointerDown={onSwipeStart}
+            onPointerMove={onSwipeMove}
+            onPointerUp={onSwipeEnd}
+            onPointerCancel={onSwipeCancel}
           >
             <img
+              ref={imageRef}
               key={current.id}
               src={current.src}
               alt={current.alt}
               decoding="async"
-              className={`max-h-[78vh] w-auto max-w-full rounded-2xl object-contain ${slideClass}`}
+              draggable={false}
+              className={`max-h-[78vh] w-auto max-w-full cursor-grab rounded-2xl object-contain active:cursor-grabbing ${slideClass}`}
             />
             <figcaption className="mt-3 text-center text-sm text-primary-foreground/85">
               {current.caption}

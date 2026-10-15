@@ -15,7 +15,7 @@ export function SiteFooter() {
             Breaking Barriers, Building Futures.
           </p>
           <p className="mx-auto mt-3 max-w-xl text-sm text-primary-foreground/80">
-            A Widow, But Not Wasted
+            Empowering widows, nurturing young girls, and supporting vulnerable communities.
           </p>
 
           <div className="mx-auto mt-8 grid max-w-2xl gap-4 text-sm text-primary-foreground/80 sm:grid-cols-2">
