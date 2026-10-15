@@ -47,7 +47,7 @@ export function FounderSpotlight() {
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
-              href="https://wa.me/2348184344442"
+              href="https://wa.me/2347033333130"
               className="inline-flex items-center gap-2 rounded-full bg-ember px-5 py-3 text-sm font-semibold text-ember-foreground"
             >
               <MessageCircle className="h-4 w-4" />

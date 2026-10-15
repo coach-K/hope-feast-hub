@@ -24,11 +24,11 @@ export function SiteFooter() {
               Olori Adeola&apos;s Place, Agbara Estate, Agbara, Ogun State
             </p>
             <a
-              href="https://wa.me/2348184344442"
+              href="https://wa.me/2347033333130"
               className="flex items-center justify-center gap-2 hover:text-gold"
             >
               <Phone className="h-4 w-4 shrink-0 text-gold" />
-              WhatsApp 08184344442
+              WhatsApp +2347033333130
             </a>
           </div>
 

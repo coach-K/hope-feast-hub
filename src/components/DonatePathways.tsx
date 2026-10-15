@@ -52,10 +52,10 @@ export function DonatePathways() {
             WhatsApp contact only
           </p>
           <a
-            href="https://wa.me/2348184344442"
+            href="https://wa.me/2347033333130"
             className="mt-2 inline-flex items-center gap-2 font-display text-2xl text-primary-deep hover:text-primary"
           >
-            <MessageCircle className="h-5 w-5 text-primary" /> 08184344442
+            <MessageCircle className="h-5 w-5 text-primary" /> +2347033333130
           </a>
           <p className="mt-4 text-sm text-muted-foreground">
             Rice &middot; Beans &middot; Semovita &middot; Garri &middot; Cooking oil &middot; Milk

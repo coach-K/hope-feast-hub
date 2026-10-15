@@ -9,7 +9,7 @@ export const Route = createFileRoute("/donate")({
       {
         name: "description",
         content:
-          "Support Feed the Widow 2027. Give financially via Wema Bank 0126951057, or donate food items via WhatsApp 08184344442.",
+          "Support Feed the Widow 2027. Give financially via Wema Bank 0126951057, or donate food items via WhatsApp +2347033333130.",
       },
       { property: "og:title", content: "Support OLORI ADEOLA RELIEF FOUNDATION" },
       {
